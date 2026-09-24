@@ -22,7 +22,7 @@ The current epoch-staged implementation is deployed and smoke-tested on Ethereum
 | Vault | Network | Wrapper proxy | Asset | Status |
 | --- | --- | --- | --- | --- |
 | K3 cbBTC Vault (`k3cbBTC`) | Ethereum (`1`) | [`0x009c02a73706a68e0aE0209235408206E4F53709`](https://etherscan.io/address/0x009c02a73706a68e0ae0209235408206e4f53709) | [`cbBTC`](https://etherscan.io/token/0xcbb7c0000ab88b473b1f5afd9ef808440eed33bf) | Active; exact-match verified and mainnet smoke-tested |
-| K3 cirBTC Vault (`k3cirBTC`) | Arc (`5042`) | [`0x56fb80282BB565dE67c196924dda0138e30323BE`](https://explorer.arc.io/address/0x56fb80282BB565dE67c196924dda0138e30323BE) | [`cirBTC`](https://explorer.arc.io/token/0x171A4217b86A807A64eB94757Db6849fb4bDbAA0) | Wiring verified; source verification incomplete; pending activation and funded smoke test |
+| K3 cirBTC Vault (`k3cirBTC`) | Arc (`5042`) | [`0x56fb80282BB565dE67c196924dda0138e30323BE`](https://arc.etherscan.io/address/0x56fb80282BB565dE67c196924dda0138e30323BE) | [`cirBTC`](https://arc.etherscan.io/token/0x171A4217b86A807A64eB94757Db6849fb4bDbAA0) | Wiring and exact-match sources verified; pending activation and funded smoke test |
 
 The wrapper proxy is the canonical integration address. See the [`deployments/`](deployments/README.md) registry for each deployment's implementation, beacon, `Staging`, owner and smart-account configuration, deployment receipts, compiler settings, runtime-bytecode hashes, proxy-slot checks, authorization simulations, and smoke-test status/evidence.
 

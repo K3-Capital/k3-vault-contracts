@@ -166,7 +166,7 @@
   },
   "verification": {
     "verdict": "wiring-verified-with-operational-caveats",
-    "mode": "read-only RPC; no broadcast",
+    "mode": "read-only RPC plus explorer source publication; no blockchain transaction",
     "snapshot": {
       "block": 22494955,
       "blockHash": "0x10447359d023eb72d9e783f3a0478741b26a34ec91b0e20a794bc034d72a1df6",
@@ -178,19 +178,19 @@
       "timestamp": "2026-09-24T09:17:19Z"
     },
     "sourceVerification": {
-      "explorer": "Arc Blockscout",
-      "status": "incomplete",
-      "checkedAt": "2026-09-24T10:03:03Z",
+      "explorer": "Arc Etherscan",
+      "status": "verified",
+      "checkedAt": "2026-09-24T10:55:39Z",
       "evidence": {
-        "fileName": "explorer-status.json",
-        "sha256": "a5477768c871d76c9910ac12cf2f42cdbd24b2def3645e9c0df8a69fed349c75"
+        "fileName": "etherscan-status.json",
+        "sha256": "559a58adb05a5c62c4e56488e1b5c1b6d0cbb0fa3462a75e8369a6d33c069800"
       },
       "contracts": {
-        "coordinator": "not-verified",
-        "implementation": "fully-verified",
-        "beacon": "partially-verified",
-        "wrapperProxy": "fully-verified",
-        "staging": "fully-verified"
+        "coordinator": "verified",
+        "implementation": "verified",
+        "beacon": "verified",
+        "wrapperProxy": "verified",
+        "staging": "verified"
       }
     },
     "runtimeBytecode": {
@@ -413,7 +413,7 @@
     "operationalCaveats": [
       "Owner and settlement authority have empty code, nonce zero and zero native USDC at the snapshot. Signing control and any intended Safe/delegation setup remain unproven.",
       "The vault is unpaused on-chain. Pending activation is an operational registry status, not an on-chain deposit gate.",
-      "Arc Blockscout source verification is incomplete: the implementation, proxy and Staging are fully verified, the beacon is partially verified, and the coordinator is not verified. A funded end-to-end mainnet smoke test is pending.",
+      "Arc Etherscan reports exact-match source verification for the implementation, beacon, proxy, Staging and coordinator. Arc Blockscout retains its earlier incomplete status. A funded end-to-end mainnet smoke test is pending.",
       "cirBTC-specific bootstrap capital, an ongoing real-share supply floor, NAV reconciliation, warning/hard-stop thresholds and a zero-share settlement policy remain unverified launch requirements; initialization alone does not establish them.",
       "Local tests and runtime provenance are not an independent security audit or approval for accepting public deposits."
     ]

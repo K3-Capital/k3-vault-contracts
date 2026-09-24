@@ -23,7 +23,7 @@ The exact timestamped Foundry broadcast artifact may also be retained under `bro
 | Chain | Vault | Wrapper proxy | Status | Record |
 | --- | --- | --- | --- | --- |
 | Ethereum (`1`) | K3 cbBTC Vault (`k3cbBTC`) | [`0x009c02a73706a68e0aE0209235408206E4F53709`](https://etherscan.io/address/0x009c02a73706a68e0ae0209235408206e4f53709) | Active; verified and mainnet smoke-tested | [`deployment.json`](1/0x009c02a73706a68e0aE0209235408206E4F53709/deployment.json) · [`verification.md`](1/0x009c02a73706a68e0aE0209235408206E4F53709/verification.md) |
-| Arc (`5042`) | K3 cirBTC Vault (`k3cirBTC`) | [`0x56fb80282BB565dE67c196924dda0138e30323BE`](https://explorer.arc.io/address/0x56fb80282BB565dE67c196924dda0138e30323BE) | Wiring verified; source verification incomplete; pending activation and funded smoke test | [`deployment.json`](5042/0x56fb80282BB565dE67c196924dda0138e30323BE/deployment.json) · [`verification.md`](5042/0x56fb80282BB565dE67c196924dda0138e30323BE/verification.md) |
+| Arc (`5042`) | K3 cirBTC Vault (`k3cirBTC`) | [`0x56fb80282BB565dE67c196924dda0138e30323BE`](https://arc.etherscan.io/address/0x56fb80282BB565dE67c196924dda0138e30323BE) | Wiring and exact-match sources verified; pending activation and funded smoke test | [`deployment.json`](5042/0x56fb80282BB565dE67c196924dda0138e30323BE/deployment.json) · [`verification.md`](5042/0x56fb80282BB565dE67c196924dda0138e30323BE/verification.md) |
 
 The Arc vault is unpaused on-chain; pending activation is an operational status, not a deposit gate. Its owner and settlement authority had empty code, nonce zero and no native USDC at the recorded snapshot. Confirm signing control, intended account setup and gas funding before launch.
 
