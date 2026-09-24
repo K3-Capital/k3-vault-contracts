@@ -1,0 +1,426 @@
+{
+  "schemaVersion": 1,
+  "deploymentId": "arc-5042-k3-cirbtc-vault",
+  "status": "deployed-pending-activation",
+  "network": {
+    "name": "Arc Mainnet",
+    "chainId": 5042,
+    "explorer": "https://explorer.arc.io",
+    "nativeGasToken": "USDC",
+    "nativeBalanceDecimals": 18
+  },
+  "vault": {
+    "name": "K3 cirBTC Vault",
+    "symbol": "k3cirBTC",
+    "decimals": 8,
+    "architecture": "ERC-1967 BeaconProxy"
+  },
+  "source": {
+    "repository": "https://github.com/K3-Capital/erc7540-wrapper",
+    "commit": "3a78d05b3481a09fbd696b7a0a93474f9887cfc8",
+    "commitUrl": "https://github.com/K3-Capital/erc7540-wrapper/commit/3a78d05b3481a09fbd696b7a0a93474f9887cfc8",
+    "deploymentScript": "script/Deploy.s.sol:DeployAll",
+    "deploymentHelper": "script/utils/DeployHelper.sol:DeployHelper",
+    "atomicCoordinator": "script/utils/AtomicDeployment.sol:AtomicDeployment",
+    "foundryBroadcast": {
+      "fileName": "broadcast/Deploy.s.sol/5042/run-1790240460311.json",
+      "sha256": "681da3eb0c64cb0b1c9eceb5253ca5f01c95f67fdf044cb55aba07aba5b8cb36",
+      "artifactCommit": "3a78d05",
+      "integrityStatus": "valid",
+      "liveTransactionPayloadMatched": true,
+      "liveReceiptMatched": true
+    },
+    "compiler": {
+      "name": "solc",
+      "version": "0.8.30+commit.73712a01",
+      "optimizerEnabled": true,
+      "optimizerRuns": 200,
+      "evmVersion": "osaka",
+      "viaIR": false,
+      "bytecodeHash": "ipfs",
+      "cborMetadata": true,
+      "useLiteralContent": false,
+      "remappings": [
+        "@openzeppelin/contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/contracts/",
+        "@openzeppelin/contracts/=lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/",
+        "erc4626-tests/=lib/openzeppelin-contracts-upgradeable/lib/erc4626-tests/",
+        "forge-std/=lib/forge-std/src/",
+        "halmos-cheatcodes/=lib/openzeppelin-contracts-upgradeable/lib/halmos-cheatcodes/src/",
+        "openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/",
+        "openzeppelin-contracts/=lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/",
+        "solady/=lib/solady/src/"
+      ],
+      "libraries": {}
+    },
+    "reproductionToolchain": {
+      "foundryVersion": "1.7.1",
+      "foundryCommit": "4072e48705af9d93e3c0f6e29e93b5e9a40caed8"
+    }
+  },
+  "configuration": {
+    "deployer": "0x43F4600D98Ae531D7e5F1f8FF68ef97779d31641",
+    "owner": "0x349bB895dB64f74AB9788693a16Ee03776195504",
+    "smartAccount": "0xf55bFE6C93FefDC3b0F0BD6b05BF7F85e60e5ac1",
+    "underlyingAsset": "0x171A4217b86A807A64eB94757Db6849fb4bDbAA0"
+  },
+  "privilegedAccounts": {
+    "snapshotBlock": 22494955,
+    "owner": {
+      "address": "0x349bB895dB64f74AB9788693a16Ee03776195504",
+      "accountType": "EOA",
+      "runtimeCode": "0x",
+      "runtimeBytecodeKeccak256": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+      "nonce": 0,
+      "balanceWei": "0",
+      "onchainMultisigOrTimelock": false,
+      "authorities": [
+        "wrapper ownership and administration",
+        "beacon implementation upgrades"
+      ]
+    },
+    "smartAccount": {
+      "address": "0xf55bFE6C93FefDC3b0F0BD6b05BF7F85e60e5ac1",
+      "accountType": "EOA",
+      "runtimeCode": "0x",
+      "runtimeBytecodeKeccak256": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+      "nonce": 0,
+      "balanceWei": "0",
+      "onchainMultisigOrTimelock": false,
+      "authorities": [
+        "close epochs",
+        "settle epochs"
+      ]
+    }
+  },
+  "contracts": {
+    "coordinator": {
+      "address": "0x90E1cac2D985E9A961f043b9682EcCe72E86f8F1",
+      "contract": "AtomicDeployment",
+      "explorerUrl": "https://explorer.arc.io/address/0x90E1cac2D985E9A961f043b9682EcCe72E86f8F1"
+    },
+    "implementation": {
+      "address": "0xBF67E0CC43285FF4392bC37b6717f522E4c8e824",
+      "contract": "SmartAccountWrapper",
+      "explorerUrl": "https://explorer.arc.io/address/0xBF67E0CC43285FF4392bC37b6717f522E4c8e824"
+    },
+    "beacon": {
+      "address": "0xc77Fb640FD7D6B056Fa30C74cB9eF65B3636C4fA",
+      "contract": "UpgradeableBeacon",
+      "explorerUrl": "https://explorer.arc.io/address/0xc77Fb640FD7D6B056Fa30C74cB9eF65B3636C4fA"
+    },
+    "wrapperProxy": {
+      "address": "0x56fb80282BB565dE67c196924dda0138e30323BE",
+      "contract": "BeaconProxy",
+      "explorerUrl": "https://explorer.arc.io/address/0x56fb80282BB565dE67c196924dda0138e30323BE"
+    },
+    "staging": {
+      "address": "0x778ef6d801672009bCd878f69055f56907fa2217",
+      "contract": "Staging",
+      "explorerUrl": "https://explorer.arc.io/address/0x778ef6d801672009bCd878f69055f56907fa2217"
+    },
+    "underlyingAsset": {
+      "address": "0x171A4217b86A807A64eB94757Db6849fb4bDbAA0",
+      "name": "Circle Wrapped Bitcoin",
+      "symbol": "cirBTC",
+      "decimals": 8,
+      "explorerUrl": "https://explorer.arc.io/token/0x171A4217b86A807A64eB94757Db6849fb4bDbAA0"
+    }
+  },
+  "deployment": {
+    "completedAt": "2026-09-24T09:01:00Z",
+    "firstBlock": 22493034,
+    "completionBlock": 22493034,
+    "completionBlockHash": "0xedd2e43ad685c3fc39ab14e58a51cbbd69c28e47c74c55fddb3109c89c3b91dc",
+    "canonicalCreate2Deployer": "0x4e59b44847b379578588920cA78FbF26c0B4956C",
+    "create3": {
+      "derivedSalts": {
+        "implementation": "0xd01dfd2dffb3299755a11109df0ba6f394f5dc5bacded86cab0fc8a6ca4b78dd",
+        "beacon": "0x4ab251a39ee88917439fba82aab90760721331f63f811cd3472ef169cec39a5d",
+        "wrapper": "0x8212c2aec118628f64e22f9f53b1ffe7fe9075543b1f25192fcfb88099399be4"
+      },
+      "ephemeralDeployers": {
+        "implementation": "0x1cD94c37848e3E671b60dbf75EcC647Cf5A31A96",
+        "beacon": "0x98f16a786f07Df6bCB85691647A798065565e140",
+        "wrapper": "0x0273903C4149BCb18a1719c75070628Aa0501776"
+      }
+    },
+    "atomic": true,
+    "publicDeploymentSalt": "0x3a83f4c06d442e3710a5ccf67569580ba17afe4f6acb5464c3356d10a6be6b3f",
+    "coordinatorSalt": "0xcb7a682c7ae258f2dda46bca127dff36087f097f6e70325a2c26e2950e99d34e",
+    "transactionSender": "0x43F4600D98Ae531D7e5F1f8FF68ef97779d31641",
+    "senderNonce": 0,
+    "valueWei": "0",
+    "effectiveGasPriceWei": "21000000000",
+    "gasCostNativeUSDC": "0.10930521",
+    "transactions": [
+      {
+        "sequence": 1,
+        "purpose": "deploy AtomicDeployment coordinator; atomically create implementation, beacon, initialized wrapper proxy and Staging",
+        "hash": "0x3eddb609c2efa695fd003bf8e1ad0f2146c1b3cc2a43e9ecfc336a1bf47aae49",
+        "block": 22493034,
+        "transactionIndex": 2,
+        "status": 1,
+        "gasUsed": 5205010
+      }
+    ]
+  },
+  "verification": {
+    "verdict": "wiring-verified-with-operational-caveats",
+    "mode": "read-only RPC; no broadcast",
+    "snapshot": {
+      "block": 22494955,
+      "blockHash": "0x10447359d023eb72d9e783f3a0478741b26a34ec91b0e20a794bc034d72a1df6",
+      "timestamp": "2026-09-24T09:17:15Z"
+    },
+    "latestStateRecheck": {
+      "block": 22494963,
+      "blockHash": "0x577de1398c6fc1a7e252a0bde01308196c279d33c525b8ab370610f324bd9c5e",
+      "timestamp": "2026-09-24T09:17:19Z"
+    },
+    "sourceVerification": {
+      "explorer": "Arc Blockscout",
+      "status": "incomplete",
+      "checkedAt": "2026-09-24T10:03:03Z",
+      "evidence": {
+        "fileName": "explorer-status.json",
+        "sha256": "a5477768c871d76c9910ac12cf2f42cdbd24b2def3645e9c0df8a69fed349c75"
+      },
+      "contracts": {
+        "coordinator": "not-verified",
+        "implementation": "fully-verified",
+        "beacon": "partially-verified",
+        "wrapperProxy": "fully-verified",
+        "staging": "fully-verified"
+      }
+    },
+    "runtimeBytecode": {
+      "coordinator": {
+        "bytes": 258,
+        "keccak256": "0x38a2a18b25f452c3fef2c49c04723761fdc318d7bc1b2fff65412ced5e06db4f",
+        "exactArtifactMatch": true,
+        "immutableSubstitutions": {
+          "49013": "0xBF67E0CC43285FF4392bC37b6717f522E4c8e824",
+          "49015": "0xc77Fb640FD7D6B056Fa30C74cB9eF65B3636C4fA",
+          "49017": "0x56fb80282BB565dE67c196924dda0138e30323BE"
+        }
+      },
+      "implementation": {
+        "bytes": 19167,
+        "keccak256": "0xad4777be5d6dcef322b94b7d0d30a1cbf5e8f44f98b011cf7ba4490afb836cd5",
+        "exactArtifactMatch": true,
+        "immutableSubstitutions": {}
+      },
+      "beacon": {
+        "bytes": 644,
+        "keccak256": "0x0ce4415c191fe5f2c89e67fd04fc646aa9b61958a01026bf58029708b8bd2a51",
+        "exactArtifactMatch": true,
+        "immutableSubstitutions": {}
+      },
+      "wrapperProxy": {
+        "bytes": 283,
+        "keccak256": "0xe66a3b02bbd22f6336cf260ad79da57ae221b0a952f8847af8e77fd311dc7a16",
+        "exactArtifactMatch": true,
+        "immutableSubstitutions": {
+          "43856": "0xc77Fb640FD7D6B056Fa30C74cB9eF65B3636C4fA"
+        }
+      },
+      "staging": {
+        "bytes": 577,
+        "keccak256": "0x88a6671cd7693bf05005fa16a7620f61ae40125137311e1b556a6760b347e071",
+        "exactArtifactMatch": true,
+        "immutableSubstitutions": {
+          "11314": "0x56fb80282BB565dE67c196924dda0138e30323BE"
+        }
+      },
+      "implementationCreate3Deployer": {
+        "bytes": 8,
+        "keccak256": "0x0b130a5cdfe5920e22336512f736f182f31e18977d284dba00dcd14b698071a3",
+        "exactArtifactMatch": true,
+        "nonceAtSnapshot": 2,
+        "immutableSubstitutions": {}
+      },
+      "beaconCreate3Deployer": {
+        "bytes": 8,
+        "keccak256": "0x0b130a5cdfe5920e22336512f736f182f31e18977d284dba00dcd14b698071a3",
+        "exactArtifactMatch": true,
+        "nonceAtSnapshot": 2,
+        "immutableSubstitutions": {}
+      },
+      "wrapperCreate3Deployer": {
+        "bytes": 8,
+        "keccak256": "0x0b130a5cdfe5920e22336512f736f182f31e18977d284dba00dcd14b698071a3",
+        "exactArtifactMatch": true,
+        "nonceAtSnapshot": 2,
+        "immutableSubstitutions": {}
+      }
+    },
+    "proxySlots": {
+      "beaconSlot": {
+        "slot": "0xa3f0ad74e5423aebfd80d3ef4346578335a9a72aeaee59ff6cb3582b35133d50",
+        "value": "0x000000000000000000000000c77fb640fd7d6b056fa30c74cb9ef65b3636c4fa"
+      },
+      "implementationSlot": {
+        "slot": "0x360894a13ba1a3210667c828492db98dca3e2076cc3735a920a3ca505d382bbc",
+        "value": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      "adminSlot": {
+        "slot": "0xb53127684a568b3173ae13b9f8a6016e243e63b6e8ee1178d6a717850b5d6103",
+        "value": "0x0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    "initialization": {
+      "storageSlot": "0xf0c57e16840df040f15088dc2f81fe391c3923bec73e23a9662efc9c229c6a00",
+      "proxyVersionWord": "0x0000000000000000000000000000000000000000000000000000000000000001",
+      "implementationVersionWord": "0x000000000000000000000000000000000000000000000000ffffffffffffffff",
+      "proxyReinitializationRejected": true,
+      "implementationInitializationRejected": true
+    },
+    "initialState": {
+      "owner": "0x349bB895dB64f74AB9788693a16Ee03776195504",
+      "pendingOwner": "0x0000000000000000000000000000000000000000",
+      "smartAccount": "0xf55bFE6C93FefDC3b0F0BD6b05BF7F85e60e5ac1",
+      "asset": "0x171A4217b86A807A64eB94757Db6849fb4bDbAA0",
+      "share": "0x56fb80282BB565dE67c196924dda0138e30323BE",
+      "stagingVault": "0x56fb80282BB565dE67c196924dda0138e30323BE",
+      "beaconImplementation": "0xBF67E0CC43285FF4392bC37b6717f522E4c8e824",
+      "beaconOwner": "0x349bB895dB64f74AB9788693a16Ee03776195504",
+      "ownerHasDefaultAdminRole": true,
+      "smartAccountHasDefaultAdminRole": false,
+      "paused": false,
+      "currentEpochId": 1,
+      "frozenEpochId": 0,
+      "totalSupplyBaseUnits": "0",
+      "totalAssetsBaseUnits": "0",
+      "redeemClaimReservesBaseUnits": "0",
+      "assetSurplusBaseUnits": "0",
+      "wrapperAssetBalanceBaseUnits": "0",
+      "stagingAssetBalanceBaseUnits": "0",
+      "stagingShareBalanceBaseUnits": "0",
+      "underlyingPaused": false
+    },
+    "authorizationSimulations": {
+      "block": 22494955,
+      "passed": 16,
+      "failed": 0,
+      "checks": {
+        "settler_can_close": {
+          "passed": true,
+          "expectedRevert": null,
+          "returnData": "0x00000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000002",
+          "revertData": null
+        },
+        "owner_cannot_close": {
+          "passed": true,
+          "expectedRevert": "SA__NotSmartAccount()",
+          "returnData": null,
+          "revertData": "0x57dcffc1"
+        },
+        "deployer_cannot_close": {
+          "passed": true,
+          "expectedRevert": "SA__NotSmartAccount()",
+          "returnData": null,
+          "revertData": "0x57dcffc1"
+        },
+        "settler_reaches_settlement_state_guard": {
+          "passed": true,
+          "expectedRevert": "SA__NoFrozenEpoch()",
+          "returnData": null,
+          "revertData": "0xfe8c251f"
+        },
+        "owner_cannot_settle": {
+          "passed": true,
+          "expectedRevert": "SA__NotSmartAccount()",
+          "returnData": null,
+          "revertData": "0x57dcffc1"
+        },
+        "owner_can_pause": {
+          "passed": true,
+          "expectedRevert": null,
+          "returnData": "0x",
+          "revertData": null
+        },
+        "settler_cannot_pause": {
+          "passed": true,
+          "expectedRevert": "AccessControlUnauthorizedAccount(address,bytes32)",
+          "returnData": null,
+          "revertData": "0xe2517d3f000000000000000000000000f55bfe6c93fefdc3b0f0bd6b05bf7f85e60e5ac165d7a28e3265b37a6474929f336521b332c1681b933f6cb9f3376673440d862a"
+        },
+        "deployer_cannot_pause": {
+          "passed": true,
+          "expectedRevert": "AccessControlUnauthorizedAccount(address,bytes32)",
+          "returnData": null,
+          "revertData": "0xe2517d3f00000000000000000000000043f4600d98ae531d7e5f1f8ff68ef97779d3164165d7a28e3265b37a6474929f336521b332c1681b933f6cb9f3376673440d862a"
+        },
+        "owner_can_set_smart_account": {
+          "passed": true,
+          "expectedRevert": null,
+          "returnData": "0x",
+          "revertData": null
+        },
+        "settler_cannot_set_smart_account": {
+          "passed": true,
+          "expectedRevert": "OwnableUnauthorizedAccount(address)",
+          "returnData": null,
+          "revertData": "0x118cdaa7000000000000000000000000f55bfe6c93fefdc3b0f0bd6b05bf7f85e60e5ac1"
+        },
+        "beacon_owner_can_upgrade_to_current": {
+          "passed": true,
+          "expectedRevert": null,
+          "returnData": "0x",
+          "revertData": null
+        },
+        "settler_cannot_upgrade": {
+          "passed": true,
+          "expectedRevert": "OwnableUnauthorizedAccount(address)",
+          "returnData": null,
+          "revertData": "0x118cdaa7000000000000000000000000f55bfe6c93fefdc3b0f0bd6b05bf7f85e60e5ac1"
+        },
+        "deployer_cannot_upgrade": {
+          "passed": true,
+          "expectedRevert": "OwnableUnauthorizedAccount(address)",
+          "returnData": null,
+          "revertData": "0x118cdaa700000000000000000000000043f4600d98ae531d7e5f1f8ff68ef97779d31641"
+        },
+        "proxy_cannot_reinitialize": {
+          "passed": true,
+          "expectedRevert": "InvalidInitialization()",
+          "returnData": null,
+          "revertData": "0xf92ee8a9"
+        },
+        "implementation_cannot_initialize": {
+          "passed": true,
+          "expectedRevert": "InvalidInitialization()",
+          "returnData": null,
+          "revertData": "0xf92ee8a9"
+        },
+        "outsider_cannot_move_staged_assets": {
+          "passed": true,
+          "expectedRevert": "ST__NotVault()",
+          "returnData": null,
+          "revertData": "0x7fecdc02"
+        }
+      }
+    },
+    "localTests": {
+      "passed": 91,
+      "failed": 0,
+      "skipped": 0
+    },
+    "mainnetSmokeTest": {
+      "status": "not-performed",
+      "reason": "Read-only deployment verification only; no funded deposit, settlement, redemption or claim transactions were submitted."
+    },
+    "operationalCaveats": [
+      "Owner and settlement authority have empty code, nonce zero and zero native USDC at the snapshot. Signing control and any intended Safe/delegation setup remain unproven.",
+      "The vault is unpaused on-chain. Pending activation is an operational registry status, not an on-chain deposit gate.",
+      "Arc Blockscout source verification is incomplete: the implementation, proxy and Staging are fully verified, the beacon is partially verified, and the coordinator is not verified. A funded end-to-end mainnet smoke test is pending.",
+      "cirBTC-specific bootstrap capital, an ongoing real-share supply floor, NAV reconciliation, warning/hard-stop thresholds and a zero-share settlement policy remain unverified launch requirements; initialization alone does not establish them.",
+      "Local tests and runtime provenance are not an independent security audit or approval for accepting public deposits."
+    ]
+  },
+  "documentation": {
+    "humanVerificationReport": "verification.md",
+    "smokeTestEvidence": null,
+    "registryIndex": "README.md"
+  }
+}

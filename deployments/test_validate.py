@@ -4,10 +4,15 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
+import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
+
+from deployments import validate
 
 from deployments.validate import (
     SMOKE_METHODS,
@@ -289,6 +294,147 @@ class BroadcastIntegrityTest(unittest.TestCase):
         }
         with self.assertRaises(ValueError):
             validate_broadcast_integrity(broadcast, {HASH_1}, "test")
+
+
+class ManifestValidationTest(unittest.TestCase):
+    def setUp(self) -> None:
+        temporary = tempfile.TemporaryDirectory()
+        self.addCleanup(temporary.cleanup)
+        self.root = Path(temporary.name)
+        original = validate.DEPLOYMENTS / "1/0x009c02a73706a68e0aE0209235408206E4F53709"
+        self.directory = self.root / "deployments" / original.relative_to(validate.DEPLOYMENTS)
+        shutil.copytree(original, self.directory)
+        self.path = self.directory / "deployment.json"
+        self.manifest = validate.load_json(self.path)
+        broadcast = Path(self.manifest["source"]["foundryBroadcast"]["fileName"])
+        (self.root / broadcast).parent.mkdir(parents=True)
+        shutil.copyfile(validate.ROOT / broadcast, self.root / broadcast)
+        shutil.copyfile(validate.DEPLOYMENTS / "README.md", self.root / "deployments/README.md")
+
+    def validate_manifest(self) -> None:
+        self.path.write_text(json.dumps(self.manifest), encoding="utf-8")
+        with patch.object(validate, "ROOT", self.root), patch.object(
+            validate, "DEPLOYMENTS", self.root / "deployments"
+        ):
+            validate.validate_manifest(self.path)
+
+    def test_eoa_settlement_account_does_not_require_delegation(self) -> None:
+        account = copy.deepcopy(self.manifest["privilegedAccounts"]["owner"])
+        account["address"] = self.manifest["configuration"]["smartAccount"]
+        account["authorities"] = ["close epochs", "settle epochs"]
+        self.manifest["privilegedAccounts"]["smartAccount"] = account
+        self.manifest["verification"]["postSmokeState"]["smartAccountDelegationTarget"] = None
+        self.validate_manifest()
+
+    def mark_smoke_test_not_performed(self) -> None:
+        self.manifest["status"] = "deployed-pending-activation"
+        self.manifest["verification"]["mainnetSmokeTest"] = {
+            "status": "not-performed",
+            "reason": "Read-only verification; no funded end-to-end transactions submitted.",
+        }
+        del self.manifest["verification"]["postSmokeState"]
+        del self.manifest["verification"]["postSmokeSnapshot"]
+        self.manifest["documentation"]["smokeTestEvidence"] = None
+        (self.directory / "smoke-test.json").unlink()
+
+    def test_pending_deployment_does_not_require_fabricated_smoke_evidence(self) -> None:
+        self.mark_smoke_test_not_performed()
+        self.validate_manifest()
+
+    def test_unperformed_smoke_cannot_claim_active_status(self) -> None:
+        self.mark_smoke_test_not_performed()
+        self.manifest["status"] = "active"
+        with self.assertRaises(ValueError):
+            self.validate_manifest()
+
+    def test_unperformed_smoke_requires_reason_and_no_success_fields(self) -> None:
+        self.mark_smoke_test_not_performed()
+        record = self.manifest["verification"]["mainnetSmokeTest"]
+        for reason in ("", None, True):
+            with self.subTest(reason=reason):
+                record["reason"] = reason
+                with self.assertRaises(ValueError):
+                    self.validate_manifest()
+        record["reason"] = "Not yet performed."
+        record["transactionCount"] = 0
+        with self.assertRaises(ValueError):
+            self.validate_manifest()
+
+    def test_unperformed_smoke_cannot_reference_evidence(self) -> None:
+        self.mark_smoke_test_not_performed()
+        self.manifest["documentation"]["smokeTestEvidence"] = "smoke-test.json"
+        with self.assertRaises(ValueError):
+            self.validate_manifest()
+
+    def test_unperformed_smoke_cannot_claim_post_smoke_snapshot(self) -> None:
+        self.mark_smoke_test_not_performed()
+        for key in ("postSmokeSnapshot", "postSmokeState"):
+            with self.subTest(key=key):
+                self.manifest["verification"][key] = {}
+                with self.assertRaises(ValueError):
+                    self.validate_manifest()
+                del self.manifest["verification"][key]
+
+    def test_unknown_settlement_account_type_is_rejected(self) -> None:
+        self.manifest["privilegedAccounts"]["smartAccount"]["accountType"] = "unknown"
+        with self.assertRaises(ValueError):
+            self.validate_manifest()
+
+    def test_eoa_cannot_claim_code_delegation_or_onchain_protection(self) -> None:
+        account = copy.deepcopy(self.manifest["privilegedAccounts"]["owner"])
+        account["address"] = self.manifest["configuration"]["smartAccount"]
+        self.manifest["verification"]["postSmokeState"]["smartAccountDelegationTarget"] = None
+        for key, value in (
+            ("runtimeCode", "0xef0100" + "11" * 20),
+            ("runtimeBytecodeKeccak256", HASH_1),
+            ("onchainMultisigOrTimelock", True),
+            ("onchainMultisigOrTimelock", 0),
+            ("delegationTarget", {"address": SMART_ACCOUNT}),
+        ):
+            with self.subTest(key=key, value=value):
+                self.manifest["privilegedAccounts"]["smartAccount"] = {**account, key: value}
+                with self.assertRaises(ValueError):
+                    self.validate_manifest()
+        self.manifest["privilegedAccounts"]["smartAccount"] = account
+        self.manifest["verification"]["postSmokeState"]["smartAccountDelegationTarget"] = SMART_ACCOUNT
+        with self.assertRaises(ValueError):
+            self.validate_manifest()
+
+    def test_passed_smoke_still_requires_evidence(self) -> None:
+        (self.directory / "smoke-test.json").unlink()
+        with self.assertRaises(ValueError):
+            self.validate_manifest()
+
+    def test_passed_smoke_still_requires_delegation_cross_check(self) -> None:
+        del self.manifest["verification"]["postSmokeState"]
+        with self.assertRaises(ValueError):
+            self.validate_manifest()
+
+    def test_explorer_status_evidence_hash_is_enforced(self) -> None:
+        evidence_path = self.directory / "explorer-status.json"
+        evidence_path.write_bytes(b"verified explorer status\n")
+        self.manifest["verification"]["sourceVerification"]["evidence"] = {
+            "fileName": evidence_path.name,
+            "sha256": hashlib.sha256(evidence_path.read_bytes()).hexdigest(),
+        }
+        self.validate_manifest()
+
+        evidence_path.write_bytes(b"tampered\n")
+        with self.assertRaises(ValueError):
+            self.validate_manifest()
+
+    def test_create3_record_requires_all_salts_and_deployers(self) -> None:
+        create3 = self.manifest["deployment"]["create3"]
+        for collection in ("derivedSalts", "ephemeralDeployers"):
+            with self.subTest(collection=collection):
+                value = create3[collection].pop("wrapper")
+                with self.assertRaises(ValueError):
+                    self.validate_manifest()
+                create3[collection]["wrapper"] = value
+
+        create3["derivedSalts"]["wrapper"] = WRAPPER
+        with self.assertRaises(ValueError):
+            self.validate_manifest()
 
 
 class LocalPathValidationTest(unittest.TestCase):
