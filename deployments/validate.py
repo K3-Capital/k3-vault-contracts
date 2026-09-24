@@ -368,22 +368,58 @@ def validate_manifest(path: Path) -> None:
     if privileged["smartAccount"]["address"].lower() != manifest["configuration"]["smartAccount"].lower():
         raise ValueError(f"privileged smart-account mismatch: {path}")
     require_hash(privileged["owner"]["runtimeBytecodeKeccak256"], "owner runtime hash")
-    require_hash(privileged["smartAccount"]["delegationCodeKeccak256"], "smart-account delegation hash")
-    delegation_target = privileged["smartAccount"]["delegationTarget"]
-    require_address(delegation_target["address"], "smart-account delegation target")
-    require_int(delegation_target["runtimeBytes"], "delegation-target runtime byte length", 1)
-    require_hash(delegation_target["runtimeBytecodeKeccak256"], "delegation-target runtime hash")
-    post_smoke_target = manifest["verification"]["postSmokeState"]["smartAccountDelegationTarget"]
-    if delegation_target["address"].lower() != post_smoke_target.lower():
-        raise ValueError(f"smart-account delegation-target mismatch: {path}")
+    smart_account = privileged["smartAccount"]
+    if smart_account["accountType"] == "EOA":
+        require_fields(
+            smart_account,
+            {"address", "accountType", "runtimeCode", "runtimeBytecodeKeccak256", "nonce",
+             "balanceWei", "onchainMultisigOrTimelock", "authorities"},
+            "EOA settlement account",
+        )
+        empty_code_hash = "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+        if smart_account["runtimeCode"] != "0x" or smart_account["runtimeBytecodeKeccak256"] != empty_code_hash:
+            raise ValueError(f"EOA settlement account must have empty code: {path}")
+        if smart_account["onchainMultisigOrTimelock"] is not False:
+            raise ValueError(f"EOA settlement account cannot claim on-chain multisig protection: {path}")
+        post_smoke = manifest["verification"].get("postSmokeState", {})
+        if post_smoke.get("smartAccountDelegationTarget") is not None:
+            raise ValueError(f"EOA settlement account cannot claim a delegation target: {path}")
+    elif smart_account["accountType"] == "EIP-7702 delegated EOA":
+        require_hash(smart_account["delegationCodeKeccak256"], "smart-account delegation hash")
+        delegation_target = smart_account["delegationTarget"]
+        require_address(delegation_target["address"], "smart-account delegation target")
+        require_int(delegation_target["runtimeBytes"], "delegation-target runtime byte length", 1)
+        require_hash(delegation_target["runtimeBytecodeKeccak256"], "delegation-target runtime hash")
+        post_smoke = manifest["verification"].get("postSmokeState")
+        if post_smoke is None and manifest["verification"]["mainnetSmokeTest"]["status"] != "not-performed":
+            raise ValueError(f"smoke-tested delegation requires a post-smoke state: {path}")
+        if post_smoke is not None:
+            post_smoke_target = post_smoke.get("smartAccountDelegationTarget")
+            require_address(post_smoke_target, "post-smoke smart-account delegation target")
+            if delegation_target["address"].lower() != post_smoke_target.lower():
+                raise ValueError(f"smart-account delegation-target mismatch: {path}")
+    else:
+        raise ValueError(f"unsupported settlement account type: {smart_account['accountType']}")
     for name, contract in manifest["contracts"].items():
         require_address(contract["address"], f"contract {name}")
     for name, entry in manifest["verification"]["runtimeBytecode"].items():
         require_int(entry["bytes"], f"runtime byte length {name}", 1)
         require_hash(entry["keccak256"], f"runtime hash {name}")
+        if "nonceAtSnapshot" in entry:
+            require_int(entry["nonceAtSnapshot"], f"runtime account nonce {name}", 1)
     for name, entry in manifest["verification"]["proxySlots"].items():
         require_hash(entry["slot"], f"proxy slot {name}")
         require_hash(entry["value"], f"proxy slot value {name}")
+
+    create3 = manifest["deployment"].get("create3")
+    if create3 is not None:
+        create3 = require_fields(create3, {"derivedSalts", "ephemeralDeployers"}, "CREATE3 deployment record")
+        roles = {"implementation", "beacon", "wrapper"}
+        salts = require_fields(create3["derivedSalts"], roles, "CREATE3 derived salts")
+        deployers = require_fields(create3["ephemeralDeployers"], roles, "CREATE3 deployers")
+        for role in sorted(roles):
+            require_hash(salts[role], f"CREATE3 {role} salt")
+            require_address(deployers[role], f"CREATE3 {role} deployer")
 
     validate_transactions(manifest["deployment"]["transactions"], str(path))
 
@@ -410,22 +446,55 @@ def validate_manifest(path: Path) -> None:
         path.parent,
         "human verification report",
     )
-    smoke_path = resolve_local_path(
-        path.parent,
-        documentation["smokeTestEvidence"],
-        path.parent,
-        "smoke-test evidence",
-    )
     registry_path = resolve_local_path(
         DEPLOYMENTS,
         documentation["registryIndex"],
         DEPLOYMENTS,
         "deployment registry index",
     )
-    for target in (report_path, smoke_path, registry_path):
+    for target in (report_path, registry_path):
         if not target.is_file():
             raise ValueError(f"missing documentation target: {target}")
+    source_verification = manifest["verification"].get("sourceVerification", {})
+    explorer_evidence = source_verification.get("evidence")
+    if explorer_evidence is not None:
+        explorer_evidence = require_fields(
+            explorer_evidence,
+            {"fileName", "sha256"},
+            "explorer-status evidence",
+        )
+        explorer_path = resolve_local_path(
+            path.parent,
+            explorer_evidence["fileName"],
+            path.parent,
+            "explorer-status evidence",
+        )
+        if not explorer_path.is_file():
+            raise ValueError(f"missing explorer-status evidence: {explorer_path}")
+        require_sha256(explorer_evidence["sha256"], "explorer-status evidence SHA-256")
+        explorer_sha256 = hashlib.sha256(explorer_path.read_bytes()).hexdigest()
+        if explorer_sha256 != explorer_evidence["sha256"]:
+            raise ValueError(f"explorer-status SHA-256 mismatch: {explorer_path}")
     manifest_smoke = manifest["verification"]["mainnetSmokeTest"]
+    if manifest_smoke["status"] == "not-performed":
+        require_fields(manifest_smoke, {"status", "reason"}, "unperformed smoke-test record")
+        require_string(manifest_smoke["reason"], "unperformed smoke-test reason")
+        if manifest["status"] != "deployed-pending-activation":
+            raise ValueError(f"deployment without a smoke test must be pending activation: {path}")
+        if documentation["smokeTestEvidence"] is not None:
+            raise ValueError(f"unperformed smoke test cannot reference evidence: {path}")
+        if {"postSmokeState", "postSmokeSnapshot"} & manifest["verification"].keys():
+            raise ValueError(f"unperformed smoke test cannot claim a post-smoke snapshot: {path}")
+        print(f"validated {path.relative_to(ROOT)} (smoke test not performed)")
+        return
+    smoke_path = resolve_local_path(
+        path.parent,
+        documentation["smokeTestEvidence"],
+        path.parent,
+        "smoke-test evidence",
+    )
+    if not smoke_path.is_file():
+        raise ValueError(f"missing documentation target: {smoke_path}")
     if manifest_smoke["evidenceFile"] != documentation["smokeTestEvidence"]:
         raise ValueError(f"smoke-test evidence filename mismatch: {path}")
     smoke_sha256 = hashlib.sha256(smoke_path.read_bytes()).hexdigest()

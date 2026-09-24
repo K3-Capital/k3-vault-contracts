@@ -1,0 +1,73 @@
+{
+  "explorer": "Arc Blockscout",
+  "explorerUrl": "https://explorer.arc.io",
+  "checkedAt": "2026-09-24T10:03:03Z",
+  "method": "Read-only Blockscout v2 smart-contract and address APIs; explorer-reported source status, not a new source submission.",
+  "contracts": {
+    "coordinator": {
+      "address": "0x90E1cac2D985E9A961f043b9682EcCe72E86f8F1",
+      "apiUrl": "https://explorer.arc.io/api/v2/smart-contracts/0x90E1cac2D985E9A961f043b9682EcCe72E86f8F1",
+      "addressIsVerified": false,
+      "isVerified": null,
+      "isFullyVerified": null,
+      "isPartiallyVerified": null,
+      "contractName": null,
+      "sourcePath": null,
+      "compilerVersion": null,
+      "verifiedAt": null,
+      "runtimeBytecodeKeccak256": "0x38a2a18b25f452c3fef2c49c04723761fdc318d7bc1b2fff65412ced5e06db4f"
+    },
+    "implementation": {
+      "address": "0xBF67E0CC43285FF4392bC37b6717f522E4c8e824",
+      "apiUrl": "https://explorer.arc.io/api/v2/smart-contracts/0xBF67E0CC43285FF4392bC37b6717f522E4c8e824",
+      "addressIsVerified": true,
+      "isVerified": true,
+      "isFullyVerified": true,
+      "isPartiallyVerified": false,
+      "contractName": "SmartAccountWrapper",
+      "sourcePath": "src/SmartAccountWrapper.sol",
+      "compilerVersion": "v0.8.30+commit.73712a01",
+      "verifiedAt": "2026-09-24T09:42:32.757072Z",
+      "runtimeBytecodeKeccak256": "0xad4777be5d6dcef322b94b7d0d30a1cbf5e8f44f98b011cf7ba4490afb836cd5"
+    },
+    "beacon": {
+      "address": "0xc77Fb640FD7D6B056Fa30C74cB9eF65B3636C4fA",
+      "apiUrl": "https://explorer.arc.io/api/v2/smart-contracts/0xc77Fb640FD7D6B056Fa30C74cB9eF65B3636C4fA",
+      "addressIsVerified": true,
+      "isVerified": true,
+      "isFullyVerified": false,
+      "isPartiallyVerified": true,
+      "contractName": "UpgradeableBeacon",
+      "sourcePath": "contracts/UpgradeableBeacon.sol",
+      "compilerVersion": "v0.8.30+commit.73712a01",
+      "verifiedAt": "2026-09-24T09:53:14.255905Z",
+      "runtimeBytecodeKeccak256": "0x0ce4415c191fe5f2c89e67fd04fc646aa9b61958a01026bf58029708b8bd2a51"
+    },
+    "wrapperProxy": {
+      "address": "0x56fb80282BB565dE67c196924dda0138e30323BE",
+      "apiUrl": "https://explorer.arc.io/api/v2/smart-contracts/0x56fb80282BB565dE67c196924dda0138e30323BE",
+      "addressIsVerified": true,
+      "isVerified": true,
+      "isFullyVerified": true,
+      "isPartiallyVerified": false,
+      "contractName": "BeaconProxy",
+      "sourcePath": "lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/beacon/BeaconProxy.sol",
+      "compilerVersion": "v0.8.30+commit.73712a01",
+      "verifiedAt": "2026-09-24T09:01:11.137062Z",
+      "runtimeBytecodeKeccak256": "0xe66a3b02bbd22f6336cf260ad79da57ae221b0a952f8847af8e77fd311dc7a16"
+    },
+    "staging": {
+      "address": "0x778ef6d801672009bCd878f69055f56907fa2217",
+      "apiUrl": "https://explorer.arc.io/api/v2/smart-contracts/0x778ef6d801672009bCd878f69055f56907fa2217",
+      "addressIsVerified": true,
+      "isVerified": true,
+      "isFullyVerified": true,
+      "isPartiallyVerified": false,
+      "contractName": "Staging",
+      "sourcePath": "src/Staging.sol",
+      "compilerVersion": "v0.8.30+commit.73712a01",
+      "verifiedAt": "2026-09-24T09:55:17.231487Z",
+      "runtimeBytecodeKeccak256": "0x88a6671cd7693bf05005fa16a7620f61ae40125137311e1b556a6760b347e071"
+    }
+  }
+}
