@@ -11,7 +11,7 @@ This directory contains thin bash wrappers around the Foundry deployment scripts
 | `predict.sh` | Dry-run `DeployAll` and preview deployed addresses | read-only |
 | `deploy.sh` | Deploy implementation, beacon, and wrapper proxy | dry-run unless `--broadcast` is passed |
 | `upgrade.sh` | Deploy a new implementation and upgrade an existing beacon | dry-run unless `--broadcast` is passed |
-| `verify.sh` | Submit implementation, beacon, proxy, or `Staging` block-explorer verification | submits verification request |
+| `verify.sh` | Submit implementation, beacon, proxy, `Staging`, or coordinator block-explorer verification | submits verification request |
 
 ## Configuration
 
@@ -46,6 +46,7 @@ Optional post-deployment variables:
 | `WRAPPER_ADDRESS` | Existing wrapper proxy to record/verify. |
 | `NETWORK` | Block explorer chain name used by `forge verify-contract --chain`, e.g. `mainnet` or `sepolia`. |
 | `ETHERSCAN_API_KEY` | Block explorer API key used by `forge verify-contract`. |
+| `VERIFIER_URL` | Optional Etherscan-compatible API URL override. `verify.sh` selects Etherscan V2 automatically for Arc chain ID `5042`. |
 
 
 Create the deployer account in Foundry's encrypted keystore instead of writing a plaintext private key to `.env`:
@@ -98,12 +99,15 @@ Then verify:
 
 ```bash
 ./bash/verify.sh implementation 0x...
-./bash/verify.sh beacon 0x...
-./bash/verify.sh wrapper 0x...
+./bash/verify.sh beacon 0x... 0x... # beacon address, then implementation address
+./bash/verify.sh wrapper 0x... 0x... # wrapper address, then beacon address
 ./bash/verify.sh staging 0x... 0x... # staging address, then wrapper address
+./bash/verify.sh coordinator 0x...
 ```
 
-The wrapper initializer deploys `Staging`, so read its address from `wrapper.staging()` before running the final command. The wrapper address is required as the `Staging` constructor argument.
+The script reconstructs each constructor payload from the third argument and the original deployment values in `.env`. The beacon needs its original implementation address; the proxy needs its beacon address; `Staging` needs the wrapper address; and the coordinator needs the original deployment tuple. The wrapper initializer deploys `Staging`, so read its address from `wrapper.staging()` before verifying it.
+
+Arc mainnet uses Etherscan API V2 at `https://api.etherscan.io/v2/api?chainid=5042`. The repository keeps that custom-chain mapping in `foundry.toml` because older Foundry releases do not know Arc's Etherscan URL. Source verification publishes no transaction and needs no wallet or gas.
 
 After verification, add a permanent record under `deployments/<chain-id>/<wrapper-address>/` containing the full source commit, compiler settings, all deployment transaction receipts, every deployed address, initialization values, live runtime-bytecode hashes, proxy-slot checks, explorer links, and a pinned-block verification report. Do not commit RPC URLs, API keys, keystore names, signer details, or mutable `run-latest.json` broadcast aliases.
 

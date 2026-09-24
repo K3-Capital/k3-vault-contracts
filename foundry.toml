@@ -7,5 +7,10 @@ evm_version = "osaka"
 optimizer = true
 optimizer_runs = 200
 
+[etherscan]
+# Arc support was added after some Foundry releases. Keep the Etherscan V2
+# endpoint explicit so those releases can resolve both the API key and URL.
+arc = { key = "${ETHERSCAN_API_KEY}", chain = 5042, url = "https://api.etherscan.io/v2/api?chainid=5042" }
+
 
 # See more config options https://github.com/foundry-rs/foundry/blob/master/crates/config/README.md#all-options
