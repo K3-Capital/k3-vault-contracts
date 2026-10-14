@@ -46,7 +46,7 @@ Optional post-deployment variables:
 | `WRAPPER_ADDRESS` | Existing wrapper proxy to record/verify. |
 | `NETWORK` | Block explorer chain name used by `forge verify-contract --chain`, e.g. `mainnet` or `sepolia`. |
 | `ETHERSCAN_API_KEY` | Block explorer API key used by `forge verify-contract`. |
-| `VERIFIER_URL` | Optional Etherscan-compatible API URL override. `verify.sh` selects Etherscan V2 automatically for Arc chain ID `5042`. |
+| `VERIFIER_URL` | Optional Etherscan-compatible API URL override. Omit for Etherscan V2 defaults: `mainnet`/`1`, `sepolia`, or a numeric chain ID (Arc: `5042`). Other aliases require an explicit URL. |
 
 
 Create the deployer account in Foundry's encrypted keystore instead of writing a plaintext private key to `.env`:
@@ -230,7 +230,11 @@ Then verify:
 
 The script reconstructs each constructor payload from the third argument and the original deployment values in `.env`. The beacon needs its original implementation address; the proxy needs its beacon address; `Staging` needs the wrapper address; and the coordinator needs the original deployment tuple. The wrapper initializer deploys `Staging`, so read its address from `wrapper.staging()` before verifying it.
 
-Arc mainnet uses Etherscan API V2 at `https://api.etherscan.io/v2/api?chainid=5042`. The repository keeps that custom-chain mapping in `foundry.toml` because older Foundry releases do not know Arc's Etherscan URL. Source verification publishes no transaction and needs no wallet or gas.
+Use recent stable Foundry (`forge` and `cast`); `verify.sh` enforces **>= 1.5.0** as a conservative V2-capable baseline. Forge 1.1.0 is unsupported here; a `Missing or unsupported chainid` error during the preliminary contract-ABI GET must not be worked around by removing `?chainid=` or skipping the already-verified check. Upgrade the tools without changing the pinned compiler/EVM/optimizer settings. The [v1.5.0 verifier](https://github.com/foundry-rs/foundry/blob/v1.5.0/crates/verify/src/etherscan/mod.rs) uses foundry-block-explorers 0.22.0, which preserves the query on GET and POST.
+
+Ethereum mainnet defaults to `https://api.etherscan.io/v2/api?chainid=1`; Arc (`NETWORK=5042`) defaults to `https://api.etherscan.io/v2/api?chainid=5042`. The repository retains Arc's custom-chain mapping in `foundry.toml` for versions without Arc metadata. `--chain` is always passed. An omitted or empty `VERIFIER_URL` selects the default; a nonempty override is preserved verbatim. The resolved URL is both exported and passed explicitly, preventing Foundry's automatic root-dotenv loading from restoring a blank URL (including when `bash/.env` takes precedence). Prefer omitting the optional variable rather than `export VERIFIER_URL=` when using Foundry directly. Source verification publishes no transaction and needs no wallet or gas.
+
+Offline wrapper regressions (standard library, fake `forge`/`cast`, public temporary dotenv fixtures only): `python3 -m unittest tools.test_verify -v`.
 
 After verification, add a permanent record under `deployments/<chain-id>/<wrapper-address>/` containing the full source commit, compiler settings, all deployment transaction receipts, every deployed address, initialization values, live runtime-bytecode hashes, proxy-slot checks, explorer links, and a pinned-block verification report. Do not commit RPC URLs, API keys, keystore names, signer details, or mutable `run-latest.json` broadcast aliases.
 

@@ -69,12 +69,41 @@ if [ -z "$ETHERSCAN_API_KEY" ]; then
     exit 1
 fi
 
-# Foundry versions released before Arc Etherscan support do not know chain 5042's
-# API URL. The matching [etherscan] entry in foundry.toml preserves the API key;
-# this explicit URL also satisfies Foundry's custom-chain verifier guard.
-if [ "$NETWORK" = "5042" ]; then
-    VERIFIER_URL=${VERIFIER_URL:-https://api.etherscan.io/v2/api?chainid=5042}
+# Conservative baseline with Etherscan V2 query preservation (including ABI GETs).
+# Forge 1.1.0 is below the supported baseline; an explicit V2 URL alone is
+# not a substitute for using a recent V2-capable verifier.
+FORGE_VERSION=$(forge --version)
+if [[ "$FORGE_VERSION" =~ Version:[[:space:]]*([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+    FORGE_MAJOR=${BASH_REMATCH[1]}
+    FORGE_MINOR=${BASH_REMATCH[2]}
+    if (( FORGE_MAJOR < 1 || (FORGE_MAJOR == 1 && FORGE_MINOR < 5) )); then
+        echo "Error: verification requires Foundry >= 1.5.0 with Etherscan V2 support; upgrade forge and cast."
+        exit 1
+    fi
+else
+    echo "Error: cannot determine Forge version; use Foundry >= 1.5.0 with Etherscan V2 support."
+    exit 1
 fi
+
+# Resolve a nonempty V2 URL before invoking Foundry. Merely unsetting an empty
+# exported URL is insufficient: Foundry auto-loads the root .env again and can
+# restore VERIFIER_URL=. Export the resolved value as well as passing it on CLI.
+if [ -z "$VERIFIER_URL" ]; then
+    case "$NETWORK" in
+        mainnet) VERIFIER_CHAIN_ID=1 ;;
+        sepolia) VERIFIER_CHAIN_ID=11155111 ;;
+        *)
+            if [[ "$NETWORK" =~ ^[1-9][0-9]*$ ]]; then
+                VERIFIER_CHAIN_ID=$NETWORK
+            else
+                echo "Error: set VERIFIER_URL explicitly or use a numeric NETWORK chain ID (mainnet and sepolia aliases are supported)."
+                exit 1
+            fi
+            ;;
+    esac
+    VERIFIER_URL="https://api.etherscan.io/v2/api?chainid=$VERIFIER_CHAIN_ID"
+fi
+export VERIFIER_URL
 
 # foundry.toml resolves the Arc explorer key through this environment variable.
 export ETHERSCAN_API_KEY
