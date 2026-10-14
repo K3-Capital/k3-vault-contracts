@@ -13,3 +13,7 @@ docs/
 
 # Dotenv file
 .env
+
+# Offline salt miner build files
+/tools/salt-miner/target/
+__pycache__/

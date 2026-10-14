@@ -67,6 +67,129 @@ This runs the real `DeployAll` script in dry-run mode and does not send transact
 
 ## Deploy
 
+### Mine a wrapper vanity address (optional)
+
+From the repository root, with Python 3.9+, Foundry, and Rust/Cargo installed:
+
+```bash
+python3 tools/mine_salt.py --prefix 0x333333
+```
+
+The miner reads `bash/.env` if present, otherwise the root `.env`, matching the
+deployment wrappers. Use `--env /path/to/config` to select another file. It does
+not source shell code, use the RPC, unlock a wallet, broadcast, or edit `.env`.
+
+Check out the repository on the CUDA machine, finalize `.env`, and run the same
+command above. The default `--backend auto` discovers `nvcc` on `PATH` or at
+`/usr/local/cuda/bin/nvcc`, builds for the local GPU, and probes the CUDA runtime.
+The compiled backend is cached under `tools/salt-miner/target/cuda/` and reused
+until the source, compiler, build flags or GPU compute capability changes.
+No job export, manual compilation, or separate verification step is needed.
+Every GPU winner is independently recomputed with the Rust CPU backend before
+it is printed; a verification mismatch is a fatal error, not a fallback.
+
+If CUDA is unavailable or its build/probe fails, auto mode uses CPU. If a CUDA
+launch/runtime error occurs during search, auto mode retries the original range
+on CPU; a completed search with no match exits `2` without searching again.
+The selected backend is printed on stderr. Use `--backend cpu` to bypass CUDA
+or `--backend cuda` to require it and fail instead of falling back.
+`--predict` uses CPU by default because it checks only one salt.
+
+Python, Foundry and Rust/Cargo are required on the checkout machine, including
+for independent GPU-result verification. A usable NVIDIA GPU, driver and CUDA
+toolkit supporting `nvcc -arch=native` are optional. Contract/CPU builds use
+explicit offline flags. If prerequisites are not cached, prepare them once
+with network access before mining:
+
+```bash
+forge build
+cargo fetch --locked --manifest-path tools/salt-miner/Cargo.toml
+```
+
+The target is `WRAPPER_ADDRESS` (the user-facing vault), not the beacon. JSON on
+stdout contains the winning `salt`, attempted candidate count, all four predicted
+addresses, public initialization parameters, CREATE2 deployer, and coordinator
+initcode hash. Progress and the public configuration preview go to stderr; RPC
+URLs and API keys are not printed. Staging's address is not included.
+
+Set `DEPLOY_SALT` to the returned salt manually, then run `./bash/deploy.sh`
+without `--broadcast` and confirm every predicted address against its output.
+Confirm the addresses are unused on the intended chain before broadcasting.
+The prediction alone does not check account control, asset identity, existing
+on-chain code, or available gas funds. Review the public parameters before
+starting a long search.
+
+To predict without searching, or bound/resume a search:
+
+```bash
+python3 tools/mine_salt.py --predict
+python3 tools/mine_salt.py --prefix 333333 --max-attempts 10000000
+python3 tools/mine_salt.py --prefix 333333 --start 0x0000000000000000000000000000000000000000000000000000000000989681
+```
+
+Search starts at the current `DEPLOY_SALT` and increments the full bytes32 salt.
+Exhausting the attempt limit exits with status `2` and prints the next `--start`
+salt. Invalid configuration/tool failures exit with status `1`. The default
+limit is 100 million candidates; no fixed limit guarantees a match. Six fixed
+hexadecimal digits need approximately 16.8 million candidates on average.
+
+Finalize the asset, owner, smart account, name/symbol, build profile and compiler
+settings before mining. The salt is part of the coordinator constructor payload,
+so its initcode hash is recomputed for each candidate. Changing deployment
+parameters, compiled coordinator bytecode, or Foundry's CREATE2 deployer changes
+the result. Keep the same environment/build configuration for mining and deployment;
+ensure previously exported deployment variables do not override the finalized
+`.env` values when Foundry runs. Placeholder and zero privileged/asset addresses
+are rejected. Dotenv values must be literals, and names/symbols containing unsupported
+shell/tuple delimiters or leading/trailing whitespace are rejected, even when quoted,
+rather than ambiguously encoded.
+Tool overrides such as `FOUNDRY_PROFILE` or `FOUNDRY_CREATE2_DEPLOYER` in the
+selected dotenv are rejected rather than silently ignored. Configure those in
+`foundry.toml` or the invoking shell, consistently for mining and deployment.
+
+#### Optional: public-job workflow without a full checkout on the GPU host
+
+The CUDA backend uses the same salt search and deployment formulas as the CPU
+miner. Prepare the public job on the machine with this repository and Foundry;
+the GPU machine needs only CUDA, a C++ compiler and Python 3, not Foundry, Cargo,
+RPC access, `.env`, or a keystore.
+
+On the repository machine, export the public job:
+
+```bash
+python3 tools/mine_salt.py --prefix 333333 --export-job /tmp/k3-gpu-job.json
+```
+
+Make `miner.cu`, `tools/run_gpu_job.py`, and the job file available on the GPU
+host using your preferred file-transfer method. From their directory on that
+host, compile and run locally:
+
+```bash
+nvcc -O3 -std=c++17 -arch=sm_86 miner.cu -o k3-salt-cuda
+python3 run_gpu_job.py --binary ./k3-salt-cuda k3-gpu-job.json > k3-gpu-result.json
+```
+
+Bring the result file back to the repository machine and verify it:
+
+```bash
+python3 tools/mine_salt.py --prefix 333333 --verify-result /tmp/k3-gpu-result.json
+```
+
+`sm_86` targets the RTX 3090; choose the appropriate architecture for other GPUs.
+CUDA kernel compilation is local to the GPU machine and needs no downloads once
+the toolkit is installed. Job export refuses to overwrite an existing file.
+The job contains public bytecode, constructor data, factory, search range and
+prefix only. Do not copy `.env` or wallet files to the GPU host. No particular
+host-access or file-transfer mechanism is required by the code or this workflow.
+
+The GPU result is explicitly marked as awaiting local CPU verification. The
+verification command recomputes every address and the coordinator initcode hash
+using the Rust CPU backend and the current local deployment configuration,
+checks the requested prefix and search range, and rejects altered results or
+changed initialization parameters. Use the same `--prefix` when verifying as
+when exporting. After CPU verification, still run the final chain-specific
+deployment dry run and availability checks before broadcasting.
+
 Always dry-run first:
 
 ```bash
