@@ -33,6 +33,15 @@ jobs:
         run: |
           forge --version
 
+      - name: Install Rust for offline salt miner
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Test offline salt miner
+        run: |
+          forge build
+          cargo build --release --locked --manifest-path tools/salt-miner/Cargo.toml
+          python3 -m unittest tools.test_mine_salt tools.test_mining_backend tools.test_salt_boundaries -v
+
       - name: Validate deployment manifests
         run: |
           python3 -m unittest deployments/test_validate.py
