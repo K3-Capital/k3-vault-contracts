@@ -8,8 +8,8 @@ optimizer = true
 optimizer_runs = 200
 
 [etherscan]
-# Arc support was added after some Foundry releases. Keep the Etherscan V2
-# endpoint explicit so those releases can resolve both the API key and URL.
+# Explicit Arc V2 mapping for Foundry versions without built-in Arc metadata.
+# Requires a V2-capable client; verify.sh enforces Foundry >= 1.5.0.
 arc = { key = "${ETHERSCAN_API_KEY}", chain = 5042, url = "https://api.etherscan.io/v2/api?chainid=5042" }
 
 

@@ -23,9 +23,12 @@ The exact timestamped Foundry broadcast artifact may also be retained under `bro
 | Chain | Vault | Wrapper proxy | Status | Record |
 | --- | --- | --- | --- | --- |
 | Ethereum (`1`) | K3 cbBTC Vault (`k3cbBTC`) | [`0x009c02a73706a68e0aE0209235408206E4F53709`](https://etherscan.io/address/0x009c02a73706a68e0ae0209235408206e4f53709) | Active; verified and mainnet smoke-tested | [`deployment.json`](1/0x009c02a73706a68e0aE0209235408206E4F53709/deployment.json) · [`verification.md`](1/0x009c02a73706a68e0aE0209235408206E4F53709/verification.md) |
+| Ethereum (`1`) | USDe Enhanced Yield (`USDe+`) | [`0x333333c5DEF8368C3fCc9c378cedc0f709Fa5ECB`](https://etherscan.io/address/0x333333c5DEF8368C3fCc9c378cedc0f709Fa5ECB) | Wiring and local bytecode verified; Etherscan Exact/Similar Match sources published; pending activation and funded smoke test | [`deployment.json`](1/0x333333c5DEF8368C3fCc9c378cedc0f709Fa5ECB/deployment.json) · [`verification.md`](1/0x333333c5DEF8368C3fCc9c378cedc0f709Fa5ECB/verification.md) |
 | Arc (`5042`) | K3 cirBTC Vault (`k3cirBTC`) | [`0x56fb80282BB565dE67c196924dda0138e30323BE`](https://arc.etherscan.io/address/0x56fb80282BB565dE67c196924dda0138e30323BE) | Wiring and exact-match sources verified; pending activation and funded smoke test | [`deployment.json`](5042/0x56fb80282BB565dE67c196924dda0138e30323BE/deployment.json) · [`verification.md`](5042/0x56fb80282BB565dE67c196924dda0138e30323BE/verification.md) |
 
 The Arc vault is unpaused on-chain; pending activation is an operational status, not a deposit gate. Its owner and settlement authority had empty code, nonce zero and no native USDC at the recorded snapshot. Confirm signing control, intended account setup and gas funding before launch.
+
+The USDe+ vault is also unpaused and has not had a funded end-to-end smoke test. Its settlement authority had empty code, nonce zero and zero ETH at the recorded snapshot. All five contracts match local build artifacts exactly; Etherscan reports Exact Match for the coordinator/proxy and Similar Match for the implementation/beacon/Staging. Explicit submissions for the latter three returned `Already Verified`; an Etherscan support request is needed to upgrade their explorer status to Full Match. The record preserves that distinction and the original constructor payloads.
 
 ## Record policy
 

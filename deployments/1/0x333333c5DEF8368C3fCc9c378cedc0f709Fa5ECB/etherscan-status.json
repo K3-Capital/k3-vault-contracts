@@ -1,0 +1,205 @@
+{
+  "explorer": "Etherscan",
+  "explorerUrl": "https://etherscan.io",
+  "apiUrl": "https://api.etherscan.io/v2/api?chainid=1",
+  "chainId": 1,
+  "checkedAt": "2026-10-14T18:38:41Z",
+  "method": "Read-only Etherscan V2 getsourcecode and public code-page read-back after explicit V2 standard-JSON verification submissions. Similar Match is recorded separately from Exact Match.",
+  "contracts": {
+    "coordinator": {
+      "address": "0x69Efc4048c041615b7286E9491240F3355fA2Af7",
+      "codeUrl": "https://etherscan.io/address/0x69Efc4048c041615b7286E9491240F3355fA2Af7#code",
+      "sourceCodeVerified": true,
+      "matchType": "Exact Match",
+      "similarMatchAddress": null,
+      "contractName": "AtomicDeployment",
+      "fullyQualifiedName": "script/utils/AtomicDeployment.sol:AtomicDeployment",
+      "compilerVersion": "v0.8.30+commit.73712a01",
+      "optimizationEnabled": true,
+      "optimizerRuns": 200,
+      "evmVersion": "osaka",
+      "constructorArguments": "0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000349bb895db64f74ab9788693a16ee03776195504000000000000000000000000bdd42d97cb0341b77e73f8f6ec54cecd068aef6b0000000000000000000000004c9edd5852cd905f086c759e8383e09bff1e68b300000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001003a83f4c06d442e3710a5ccf67569580ba17afe4f6acb5464c3356e35dc1bb93200000000000000000000000000000000000000000000000000000000000000135553446520456e68616e636564205969656c64000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005555344652b000000000000000000000000000000000000000000000000000000",
+      "expectedConstructorArguments": "0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000349bb895db64f74ab9788693a16ee03776195504000000000000000000000000bdd42d97cb0341b77e73f8f6ec54cecd068aef6b0000000000000000000000004c9edd5852cd905f086c759e8383e09bff1e68b300000000000000000000000000000000000000000000000000000000000000c000000000000000000000000000000000000000000000000000000000000001003a83f4c06d442e3710a5ccf67569580ba17afe4f6acb5464c3356e35dc1bb93200000000000000000000000000000000000000000000000000000000000000135553446520456e68616e636564205969656c64000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005555344652b000000000000000000000000000000000000000000000000000000",
+      "constructorArgumentsMatch": true,
+      "expectedConstructorArgumentsSha256": "c5a03ddddd4dac7e1c3c8b3c572f932329ae05b0cbe5c0dd29f80035423eed86",
+      "sourceResponseBytes": 289679,
+      "sourceResponseSha256": "3d0ed5d1a598009200bd7563e662c938e471719acc0e94f4ef3587d756d0ca75",
+      "abiResponseBytes": 956,
+      "abiResponseSha256": "3896381349a56e906800c5b82d89ed523b08f9df486167d28dc56cf63bcbd448",
+      "publicCodePageSha256": "0118240202b170e4c5a9856b0bc94365b6e157c6bc8b0d3e8ed614d8aa8e7631",
+      "publicCodePageStatus": "Exact Match",
+      "explorerReportedProxy": false,
+      "explorerReportedImplementation": null,
+      "submission": {
+        "guid": "8pcitf8icguvqk89uelck7dwz9nwr7fms3z7drkvbqlxflepqn",
+        "response": {
+          "status": "1",
+          "message": "OK",
+          "result": "8pcitf8icguvqk89uelck7dwz9nwr7fms3z7drkvbqlxflepqn"
+        },
+        "finalStatus": {
+          "status": "1",
+          "message": "OK",
+          "result": "Pass - Verified"
+        }
+      },
+      "fullMatchSupportRequestRequired": false
+    },
+    "implementation": {
+      "address": "0xdA324F7df50a716c66d48d33F2543Fe50Ae27B5e",
+      "codeUrl": "https://etherscan.io/address/0xdA324F7df50a716c66d48d33F2543Fe50Ae27B5e#code",
+      "sourceCodeVerified": true,
+      "matchType": "Similar Match",
+      "similarMatchAddress": "0xa1e654a7d819a71f97ca1b3e717b0be5344cb4d4",
+      "contractName": "SmartAccountWrapper",
+      "fullyQualifiedName": "src/SmartAccountWrapper.sol:SmartAccountWrapper",
+      "compilerVersion": "v0.8.30+commit.73712a01",
+      "optimizationEnabled": true,
+      "optimizerRuns": 200,
+      "evmVersion": "osaka",
+      "constructorArguments": "",
+      "expectedConstructorArguments": "",
+      "constructorArgumentsMatch": true,
+      "expectedConstructorArgumentsSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "sourceResponseBytes": 244943,
+      "sourceResponseSha256": "60e2064bc2cf6d7cc8876532882f9840630473bb314be78be36e98d491f12222",
+      "abiResponseBytes": 24148,
+      "abiResponseSha256": "9299136a13693200d5c50ba2b9692d45596478fd2a5c4cac260dfa9a2fc0d728",
+      "publicCodePageSha256": "82ff3884b16448a31d92caeaeb9dee519163f2bd6a299a113d59e0f6f3852af2",
+      "publicCodePageStatus": "Similar Match",
+      "explorerReportedProxy": false,
+      "explorerReportedImplementation": null,
+      "submission": {
+        "guid": "d1qus7juhkgwii76uj2mgghwb1vhqneevwvlhk4pmtlvv9ginr",
+        "response": {
+          "status": "1",
+          "message": "OK",
+          "result": "d1qus7juhkgwii76uj2mgghwb1vhqneevwvlhk4pmtlvv9ginr"
+        },
+        "finalStatus": {
+          "status": "0",
+          "message": "NOTOK",
+          "result": "Already Verified"
+        }
+      },
+      "fullMatchSupportRequestRequired": true
+    },
+    "beacon": {
+      "address": "0x99DaC42A6A3975d9C2a4dD2dc3554F1270666F8F",
+      "codeUrl": "https://etherscan.io/address/0x99DaC42A6A3975d9C2a4dD2dc3554F1270666F8F#code",
+      "sourceCodeVerified": true,
+      "matchType": "Similar Match",
+      "similarMatchAddress": "0x7b80bdb8f0777f52a6054a0e48afc15200b780b8",
+      "contractName": "UpgradeableBeacon",
+      "fullyQualifiedName": "lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/beacon/UpgradeableBeacon.sol:UpgradeableBeacon",
+      "compilerVersion": "v0.8.30+commit.73712a01",
+      "optimizationEnabled": true,
+      "optimizerRuns": 200,
+      "evmVersion": "osaka",
+      "constructorArguments": "",
+      "expectedConstructorArguments": "000000000000000000000000da324f7df50a716c66d48d33f2543fe50ae27b5e000000000000000000000000349bb895db64f74ab9788693a16ee03776195504",
+      "constructorArgumentsMatch": false,
+      "expectedConstructorArgumentsSha256": "7b8264c90855c271785cefb0a2ff098d779faaaff224074f1fc8543dcf087ebe",
+      "sourceResponseBytes": 8753,
+      "sourceResponseSha256": "8b0256fcf2c76e01f933f7464f910cb76e69bdeda43cf0067feded8caf411185",
+      "abiResponseBytes": 1674,
+      "abiResponseSha256": "5a2e6b16f6a9d47660f80de6e7130a8d1d150c179d2cacb97be9d2e56a7e01fa",
+      "publicCodePageSha256": "05508c886280a19f941aba2e45eae9d93ef5aea9ff527e45fbe571ca33b83e71",
+      "publicCodePageStatus": "Similar Match",
+      "explorerReportedProxy": true,
+      "explorerReportedImplementation": "0xda324f7df50a716c66d48d33f2543fe50ae27b5e",
+      "submission": {
+        "guid": "vmjvegqf5qcnwznhkfyxtnnywmx8vuhuv1kamzudpvgganttjt",
+        "response": {
+          "status": "1",
+          "message": "OK",
+          "result": "vmjvegqf5qcnwznhkfyxtnnywmx8vuhuv1kamzudpvgganttjt"
+        },
+        "finalStatus": {
+          "status": "0",
+          "message": "NOTOK",
+          "result": "Already Verified"
+        }
+      },
+      "fullMatchSupportRequestRequired": true
+    },
+    "wrapperProxy": {
+      "address": "0x333333c5DEF8368C3fCc9c378cedc0f709Fa5ECB",
+      "codeUrl": "https://etherscan.io/address/0x333333c5DEF8368C3fCc9c378cedc0f709Fa5ECB#code",
+      "sourceCodeVerified": true,
+      "matchType": "Exact Match",
+      "similarMatchAddress": null,
+      "contractName": "BeaconProxy",
+      "fullyQualifiedName": "lib/openzeppelin-contracts-upgradeable/lib/openzeppelin-contracts/contracts/proxy/beacon/BeaconProxy.sol:BeaconProxy",
+      "compilerVersion": "v0.8.30+commit.73712a01",
+      "optimizationEnabled": true,
+      "optimizerRuns": 200,
+      "evmVersion": "osaka",
+      "constructorArguments": "00000000000000000000000099dac42a6a3975d9c2a4dd2dc3554f1270666f8f0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000012483b43589000000000000000000000000349bb895db64f74ab9788693a16ee03776195504000000000000000000000000bdd42d97cb0341b77e73f8f6ec54cecd068aef6b0000000000000000000000004c9edd5852cd905f086c759e8383e09bff1e68b300000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000135553446520456e68616e636564205969656c64000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005555344652b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "expectedConstructorArguments": "00000000000000000000000099dac42a6a3975d9c2a4dd2dc3554f1270666f8f0000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000012483b43589000000000000000000000000349bb895db64f74ab9788693a16ee03776195504000000000000000000000000bdd42d97cb0341b77e73f8f6ec54cecd068aef6b0000000000000000000000004c9edd5852cd905f086c759e8383e09bff1e68b300000000000000000000000000000000000000000000000000000000000000a000000000000000000000000000000000000000000000000000000000000000e000000000000000000000000000000000000000000000000000000000000000135553446520456e68616e636564205969656c64000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005555344652b00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+      "constructorArgumentsMatch": true,
+      "expectedConstructorArgumentsSha256": "a3173f145b6b15d4c1aca83d660e2075d232b8821db13024aea5de9837712779",
+      "sourceResponseBytes": 26437,
+      "sourceResponseSha256": "435570dec2394449bb96c6a60403cccbcb13fc070633051b0504273f669e5722",
+      "abiResponseBytes": 841,
+      "abiResponseSha256": "43a8dd812f1c87d5b88f4393b926dada2c002dedddfa3c9f498b2b7a0f1191ef",
+      "publicCodePageSha256": "d2f742bac14d2b72c22adb3e4216e74c48d2c9eed246c8331ea5ed1323e8182e",
+      "publicCodePageStatus": "Exact Match",
+      "explorerReportedProxy": true,
+      "explorerReportedImplementation": "0xda324f7df50a716c66d48d33f2543fe50ae27b5e",
+      "submission": {
+        "guid": "pcqnd7iiqqbgasmzvqxzn8zgtbsimm9n56pkd5t5mcz45uweum",
+        "response": {
+          "status": "1",
+          "message": "OK",
+          "result": "pcqnd7iiqqbgasmzvqxzn8zgtbsimm9n56pkd5t5mcz45uweum"
+        },
+        "finalStatus": {
+          "status": "1",
+          "message": "OK",
+          "result": "Pass - Verified"
+        }
+      },
+      "fullMatchSupportRequestRequired": false
+    },
+    "staging": {
+      "address": "0x97a7f837f56A77842e10Bbab5327fBa38303CB40",
+      "codeUrl": "https://etherscan.io/address/0x97a7f837f56A77842e10Bbab5327fBa38303CB40#code",
+      "sourceCodeVerified": true,
+      "matchType": "Similar Match",
+      "similarMatchAddress": "0x21636c226e113d7dd59da2987eaa7dabbe4159c7",
+      "contractName": "Staging",
+      "fullyQualifiedName": "src/Staging.sol:Staging",
+      "compilerVersion": "v0.8.30+commit.73712a01",
+      "optimizationEnabled": true,
+      "optimizerRuns": 200,
+      "evmVersion": "osaka",
+      "constructorArguments": "",
+      "expectedConstructorArguments": "000000000000000000000000333333c5def8368c3fcc9c378cedc0f709fa5ecb",
+      "constructorArgumentsMatch": false,
+      "expectedConstructorArgumentsSha256": "5dc0fc0f7c3b294ba9bb84813ef94cbdc2e09f4f2a639461d9755397937a3669",
+      "sourceResponseBytes": 21865,
+      "sourceResponseSha256": "6ffc3cbfc7e87498c871812bdaf456799dc68254031a63f3cf9a0e24f0d73f3c",
+      "abiResponseBytes": 709,
+      "abiResponseSha256": "dc7eb748abd09d53e93d5411baf04321c2c91fc4518a6b855e0e5e68b310cac1",
+      "publicCodePageSha256": "0c4268510fb6334948b2f36e86944410a53f6bb02efd9991ca8ac10353cb4b70",
+      "publicCodePageStatus": "Similar Match",
+      "explorerReportedProxy": false,
+      "explorerReportedImplementation": null,
+      "submission": {
+        "guid": "bzluxizkatkh9aziiwedvmkk9y76patdn4jhi33da3rst7mxit",
+        "response": {
+          "status": "1",
+          "message": "OK",
+          "result": "bzluxizkatkh9aziiwedvmkk9y76patdn4jhi33da3rst7mxit"
+        },
+        "finalStatus": {
+          "status": "0",
+          "message": "NOTOK",
+          "result": "Already Verified"
+        }
+      },
+      "fullMatchSupportRequestRequired": true
+    }
+  }
+}
